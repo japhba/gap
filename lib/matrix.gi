@@ -756,7 +756,7 @@ function( F, mat,inum )
 
     fi;
 
-    return MinimalPolynomialMatrixNC( F, mat,inum);
+return MinimalPolynomialMatrixNC( F, mat, inum);
 end );
 
 InstallOtherMethod( MinimalPolynomial,
@@ -777,6 +777,118 @@ InstallMethod( MinimalPolynomialMatrixNC, "spinning over field",
     IsElmsCollsX,
     [ IsField, IsOrdinaryMatrix, IsPosInt ],
   Matrix_MinimalPolynomialSameField);
+
+#############################################################################
+##
+#M  JNF( <mat> )
+##
+InstallMethod( JNF,
+[ IsMatrix ],
+
+function( A )
+local m, d, c, cz, P, X, x, ps, xs, hrz, p, PA, D, k, i, J, H, Pt, dd, s, j, l, n, MP, pt, a, b, z, y, w, g; #D Defektfolge
+
+P := Factors(MinimalPolynomial(A));
+X := Factors(CharacteristicPolynomial(A));
+ps := []; #already counted polynomials
+xs := []; #already counted polynomials
+hrz := []; #Hauptraumzerlegung
+cz := []; #Charakteristische Zerlegung
+
+for p in P do
+    if not p in ps then
+        Add(ps, p);
+        Add(hrz, Length(Positions(P, p)));
+    fi;
+od;
+
+for x in X do
+    if not x in xs then
+        Add(xs, x);
+        Add(cz, Length(Positions(X, x)));
+    fi;
+od;
+
+#return hrz;
+
+J := 0*A;
+a := 1;
+b := 1;
+
+Print("MPs", ps, "\n");
+Print("Hauptraumzerlegung", hrz, "\n");
+
+#start JNF algorithm
+i := 1;
+for p in ps do #für jeden HR
+    PA := Value(p, A); #polynomial evaluated at A
+    d := DegreeOfLaurentPolynomial(p);
+    m := hrz[i];
+
+    D := []; #Initialisierung der Defekte
+
+    #calculate defects
+    for k in [1..m] do
+        Add(D, Length(NullspaceMat(PA^k)));
+    od;
+
+Print("Zyklische Zerlegung zum Polynom ", p, " auftretend in Potenz ", m, "\n");
+    Print("Defektfolge", D, "\n");
+
+    #Berechne die Partition Pt
+    Pt := [];
+
+    for j in [1..Length(D)] do
+        l := Length(D) - j + 1;
+        if l = 1 then
+            dd := D[l];
+        else
+            dd := D[l] - D[l-1];
+        fi;
+        n := dd/d;
+
+        s := 0;
+
+        if not Length(Pt) = 0 then
+            s := Sum(Pt);
+        else
+            s := 0;
+        fi;
+
+        if not s = n or n = 0 then
+            for g in [1..(n - Length(Pt))] do
+                Add(Pt, l);
+            od;
+        fi;
+    od;
+
+    Print("Partition zum Hauptraum", Pt, "\n");
+
+    MP := CompanionMat(p);
+    #construct Jordan-block from partition
+    for pt in Pt do
+        for w in [1..pt] do
+
+            for y in [a..(a + d - 1)] do
+                for z in [b..(b + d - 1)] do
+                    J[y][z] := MP[y-a+1][z-b+1];
+                od;
+            od;
+
+        a := a + d;
+        b := b + d;
+        if w < pt then
+            J[a][b-1] := 1; #Verkettungseins
+        fi;
+        od;
+    od;
+    i := i+1; #next HR
+od;
+
+return J;
+
+end );
+
 
 
 #############################################################################
