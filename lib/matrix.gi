@@ -841,7 +841,7 @@ Print("Zyklische Zerlegung zum Polynom ", p, " auftretend in Potenz ", m, "\n");
     for j in [1..Length(D)] do
         l := Length(D) - j + 1;
         if l = 1 then
-            dd := D[l];
+            dd := D[l] - 0; #dimension of smallest kernel
         else
             dd := D[l] - D[l-1];
         fi;
@@ -850,7 +850,7 @@ Print("Zyklische Zerlegung zum Polynom ", p, " auftretend in Potenz ", m, "\n");
         s := 0;
 
         if not Length(Pt) = 0 then
-            s := Sum(Pt);
+            s := Length(Pt);
         else
             s := 0;
         fi;
@@ -878,7 +878,7 @@ Print("Zyklische Zerlegung zum Polynom ", p, " auftretend in Potenz ", m, "\n");
         a := a + d;
         b := b + d;
         if w < pt then
-            J[a][b-1] := 1; #Verkettungseins
+            J[a][b-1] := 1*A[1][1]^0; #Verkettungseins
         fi;
         od;
     od;
@@ -889,6 +889,37 @@ return J;
 
 end );
 
+#############################################################################
+##
+#M  ONB( <mat> ) #Gram-Schmidt-Orthogonalization
+##
+InstallMethod( ONB,
+[ IsMatrix ],
+
+function(BP)
+local o, i, O, bi, j, p, B, P;
+
+#Print(BP);
+
+B := BP[1];
+P := BP[2];
+
+#transpose mat to get the basis vectors as elements of the array
+B := TransposedMat(B);
+
+for j in [1..Length(B)] do
+    p := B[1]*0; #null vector with corresponding dimension
+
+	for i in [1..j-1] do
+        p := p + (O[1]*P*B[j])/(O[1]*P*O[1])*O[i];
+    od;
+od;
+
+Add(O, B[j] - p);
+
+return TransposedMat(O);
+
+end );
 
 
 #############################################################################

@@ -1969,6 +1969,31 @@ DeclareOperation("CharacteristicPolynomialMatrixNC",
 ##
 DeclareAttribute( "JNF", IsMatrix );
 
+#################JB#########################################################
+##
+#A  ONB( <mat> )  . . . . . . . . . . . . .  dimensions of a matrix
+##
+##  <#GAPDoc Label="DimensionsMat">
+##  <ManSection>
+##  <Attr Name="DimensionsMat" Arg='mat'/>
+##
+##  <Description>
+##  is a list of length 2, the first being the number of rows, the second
+##  being the number of columns of the matrix <A>mat</A>. If <A>mat</A> is
+##  malformed, that is, it is not a <Ref Prop="IsRectangularTable"/>,
+##  returns <K>fail</K>.
+##  <Example><![CDATA[
+##  gap> DimensionsMat([[1,2,3],[4,5,6]]);
+##  [ 2, 3 ]
+##  gap> DimensionsMat([[1,2,3],[4,5]]);
+##  fail
+##  ]]></Example>
+##  </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+##
+DeclareAttribute( "ONB", IsMatrix );
+
 
 
 #############################################################################
