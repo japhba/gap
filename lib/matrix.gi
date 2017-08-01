@@ -911,7 +911,7 @@ for j in [1..Length(B)] do
     p := B[1]*0; #null vector with corresponding dimension
 
 	for i in [1..j-1] do
-        p := p + (O[1]*P*B[j])/(O[1]*P*O[1])*O[i];
+        p := p + ((O[i]*P*B[j])/(O[i]*P*O[i])) * O[i];
     od;
 od;
 
