@@ -1971,17 +1971,18 @@ DeclareAttribute( "JNF", IsMatrix );
 
 #################JB#########################################################
 ##
-#A  ONB( <mat> )  . . . . . . . . . . . . .  dimensions of a matrix
+#A  OGB( <mat> )  . . . . . . . . . . . . .  dimensions of a matrix
 ##
 ##  <#GAPDoc Label="DimensionsMat">
 ##  <ManSection>
 ##  <Attr Name="DimensionsMat" Arg='mat'/>
 ##
 ##  <Description>
-##  is a list of length 2, the first being the number of rows, the second
-##  being the number of columns of the matrix <A>mat</A>. If <A>mat</A> is
-##  malformed, that is, it is not a <Ref Prop="IsRectangularTable"/>,
-##  returns <K>fail</K>.
+##  calculates an orthogonal basis with respect to a specified bilinear form,
+##  that is specified in the second argument, for example
+##      OGB( B, A ) where B is the Matrix with the basis vectors as rows and
+##  A is the Gram Matrix with respect to the basis B is expressed in.
+##
 ##  <Example><![CDATA[
 ##  gap> DimensionsMat([[1,2,3],[4,5,6]]);
 ##  [ 2, 3 ]
@@ -1992,7 +1993,7 @@ DeclareAttribute( "JNF", IsMatrix );
 ##  </ManSection>
 ##  <#/GAPDoc>
 ##
-DeclareAttribute( "ONB", IsMatrix );
+DeclareOperation( "OGB", [ IsMatrix, IsMatrix ] );
 
 
 

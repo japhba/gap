@@ -891,18 +891,17 @@ end );
 
 #############################################################################
 ##
-#M  ONB( <mat> ) #Gram-Schmidt-Orthogonalization
+#M  OGB( <mat> ) #Gram-Schmidt-Orthogonalization
 ##
-InstallMethod( ONB,
-[ IsMatrix ],
+InstallMethod( OGB,
+[ IsMatrix, IsMatrix],
 
-function(BP)
-local o, i, O, bi, j, p, B, P;
-
+function(B, P) #B is the basis, P the matrix which induces the bilinear form
+local o, i, O, bi, j, p;
 #Print(BP);
 
-B := BP[1];
-P := BP[2];
+O := []; #orthogonal basis to be filled up
+
 
 #transpose mat to get the basis vectors as elements of the array
 B := TransposedMat(B);
@@ -913,9 +912,8 @@ for j in [1..Length(B)] do
 	for i in [1..j-1] do
         p := p + ((O[i]*P*B[j])/(O[i]*P*O[i])) * O[i];
     od;
+    Add(O, B[j] - p);
 od;
-
-Add(O, B[j] - p);
 
 return TransposedMat(O);
 
